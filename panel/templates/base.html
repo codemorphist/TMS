@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title%}TMS Panel{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <h1><a href="{% url 'panel' %}">TMS Panel</a></h1>
+            <menu>
+                <li><a href="{% url 'products' %}">Products</a></li>
+                <li><a href="deliveries/">Deliveries</a></li>
+                <li><a href="sales/">Sales</a></li>
+                <li><a href="providers/">Providers</a></li>
+                <li><a href="clients/">Clients</a></li>
+            </menu>
+        </header>
+        <hr>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <hr>
+
+        <footer>
+            <p>Copyright &copy; 2025 TMS Panel</p>
+        </footer>
+    </body>
+</html>
