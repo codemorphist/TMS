@@ -1,13 +1,18 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>{% block title%}TMS Panel{% endblock %}</title>
+        <link type="text/css" rel="stylesheet" href="{% static 'panel/css/reset.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'panel/css/base.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'panel/css/table.css' %}">
     </head>
     <body>
-        <header>
-            <h1><a href="{% url 'panel' %}">TMS Panel</a></h1>
-            <menu>
+        <header class="header-page">
+            <h1 class="header-heading"><a href="{% url 'panel' %}">TMS Panel</a></h1>
+            <menu class="header-menu">
                 <li><a href="{% url 'products' %}">Products</a></li>
                 <li><a href="deliveries/">Deliveries</a></li>
                 <li><a href="sales/">Sales</a></li>
@@ -15,15 +20,13 @@
                 <li><a href="clients/">Clients</a></li>
             </menu>
         </header>
-        <hr>
 
-        <main>
+        <main class="main-page">
             {% block content %}{% endblock %}
         </main>
-        <hr>
 
-        <footer>
-            <p>Copyright &copy; 2025 TMS Panel</p>
+        <footer class="footer-page">
+            <p class="footer-copy">Copyright &copy; 2025 TMS Panel</p>
         </footer>
     </body>
 </html>
