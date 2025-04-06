@@ -5,13 +5,25 @@
     <title>Products</title>
 </head>
 <body>
-    {% for product in products %}
-        <div>
-            <h1><a href="{% url 'product' product.id %}">{{ product.name }}</a></h1>
-            <p>{{ product.description }}</p>
-            <span>Price: ${{ product.price }}</span>
-            <span>Count: {{ product.count }}</span>
-        </div>
-    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Description</td>
+                <td>Price</td>
+                <td>Count</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
+                <td>{{ product.description }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

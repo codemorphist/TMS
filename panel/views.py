@@ -22,11 +22,11 @@ def show_products(request: HttpRequest) -> HttpResponse:
     return render(request, 'panel/products.html', context=context)
 
 
-def show_product(request: HttpRequest, product_id: int) -> HttpResponse:
+def show_product(request: HttpRequest, product_id: str) -> HttpResponse:
     """
     Product page, show information about product
     """
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     context = {
         'product': product,
     }
