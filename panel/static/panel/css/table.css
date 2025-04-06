@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+    table-layout: fixed;
+}
+
+table th,
+table td {
+    padding: 8px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+table thead tr {
+    background: aquamarine;
+}
