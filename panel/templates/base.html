@@ -1,3 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title%}TMS Panel{% endblock %}</title>
+    </head>
+    <body>
+        <header class="header-page">
+            <h1 class="header-heading"><a href="{% url 'panel' %}">TMS Panel</a></h1>
+            <menu class="header-menu">
+                <li><a href="{% url 'products' %}">Products</a></li>
+                <li><a href="deliveries/">Deliveries</a></li>
+                <li><a href="sales/">Sales</a></li>
+                <li><a href="providers/">Providers</a></li>
+                <li><a href="clients/">Clients</a></li>
+            </menu>
+        </header>
 
         <main class="main-page">
             {% block content %}{% endblock %}
