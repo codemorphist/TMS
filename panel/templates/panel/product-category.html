@@ -1,40 +1,17 @@
+
 {% extends 'base.html' %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Product Category: {{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="product-categories-table">
-    <h1>Poducts Categories</h1>
+<div class="product-category">
+    <h1>Product Category: {{ category.name }}</h1>
     <div class="table-container">
         <table>
             <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for cat in categories %}
-            <tr>
-                <td>{{ cat.id }}</td>
-                <td><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-<div class="products-table">
-    <h1>Poducts</h1>
-    <div class="table-container">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
                 <th>Description</th>
                 <th>Price</th>
                 <th>Count</th>
@@ -45,7 +22,6 @@
             <tr>
                 <td>{{ product.id }}</td>
                 <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
-                <td><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></td>
                 <td>{{ product.description }}</td>
                 <td>${{ product.price }}</td>
                 <td>{{ product.count }}</td>
