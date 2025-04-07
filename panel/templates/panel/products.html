@@ -3,26 +3,31 @@
 {% block title %}Products{% endblock %}
 
 {% block content %}
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in products %}
-        <tr>
-            <td>{{ product.id }}</td>
-            <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
-            <td>{{ product.description }}</td>
-            <td>${{ product.price }}</td>
-            <td>{{ product.count }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="products-table">
+    <h1>Poducts Table</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
+                <td>{{ product.description }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.count }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
