@@ -15,7 +15,7 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('product', kwargs={'product_id': self.id})
+        return reverse('panel:product', kwargs={'product_id': self.id})
 
 
 class ProductCategory(models.Model):
@@ -26,7 +26,7 @@ class ProductCategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('product-category', kwargs={'category': self.slug})
+        return reverse('panel:product-category', kwargs={'category': self.slug})
 
 
 class Provider(models.Model):
@@ -36,14 +36,36 @@ class Provider(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('provider', kwargs={'provider_id': self.id})
+        return reverse('panel:provider', kwargs={'provider_id': self.id})
+
+
+class Client(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('panel:client', kwargs={'client_id': self.id})
 
 
 class Delivery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     provider = models.ForeignKey(Provider, on_delete=models.PROTECT)
     count = models.IntegerField(default=0)
-    price_by_one = models.FloatField(default=0.0)
+    price_for_one = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f'{self.product.name} ({self.count}) - {self.price_by_one} <- {self.provider.name}'
+        return (f'{self.product.name} (x{self.count}) ({self.price_for_one})'
+                f' <- {self.provider.name} [{self.provider.id}]')
+
+
+class Sale(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    count = models.IntegerField(default=0)
+    price_for_one = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return (f'{self.product.name} (x{self.count}) ({self.price_for_one})'
+                f' -> {self.client.name} [{self.client.id}]')

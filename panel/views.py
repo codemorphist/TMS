@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 
-from panel.models import Product, ProductCategory, Provider
+from panel.models import Product, ProductCategory, Provider, Client, Sale, Delivery
 
 
 def panel(request: HttpRequest) -> HttpResponse:
@@ -61,3 +61,43 @@ def show_provider(request: HttpRequest, provider_id: int) -> HttpResponse:
         'products': products,
     }
     return render(request, 'panel/provider.html', context=context)
+
+
+def show_clients(request: HttpRequest) -> HttpResponse:
+    clients = Client.objects.all()
+    context = {
+        'clients': clients,
+    }
+    return render(request, 'panel/clients.html', context=context)
+
+
+def show_client(request: HttpRequest, client_id: int) -> HttpResponse:
+    client = get_object_or_404(Client, id=client_id)
+    context = {
+        'client': client,
+    }
+    return render(request, 'panel/client.html', context=context)
+
+
+def show_sales(request: HttpRequest) -> HttpResponse:
+    sales = Sale.objects.all()
+    context = {
+        'sales': sales,
+    }
+    return render(request, 'panel/sales.html', context=context)
+
+
+def show_sale(request: HttpRequest, sale_id: int) -> HttpResponse:
+    sale = get_object_or_404(Sale, id=sale_id)
+    context = {
+        'sale': sale,
+    }
+    return render(request, 'panel/sale.html', context=context)
+
+
+def show_deliveries(request: HttpRequest) -> HttpResponse:
+    deliveries = Delivery.objects.all()
+    context = {
+        'deliveries': deliveries,
+    }
+    return render(request, 'panel/deliveries.html', context=context)
