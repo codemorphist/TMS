@@ -6,7 +6,7 @@
 <div>
     <h1>{{ product.name }}</h1>
     <ul>
-        <li>Category: <a href="{% url 'product-category' product.category.slug %}">{{ product.category }}</a> </li>
+        <li>Category: <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a> </li>
         <li>Description: {{ product.description }}</li>
         <li>Price: ${{ product.price }}</li>
         <li>Count: {{ product.count }}</li>

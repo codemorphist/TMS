@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-fn24p3^e9+xe3qd(-9_^q+#7wu0$_kw&5eneb40dl=69)srjb2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] # WARNING ONLY FOR TEST
+ALLOWED_HOSTS = ['127.0.0.1']
+
+INTERNAL_IPS = ['127.0.0.1']
+
 
 
 # Application definition
@@ -37,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # --- PACKAGES FOR DEV ---
     'django_extensions',
+    'debug_toolbar',
+    # --- PACKAGES FOR DEV ---
     'panel',
 ]
 
@@ -49,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'tms.urls'

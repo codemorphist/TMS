@@ -15,8 +15,8 @@ def show_products(request: HttpRequest) -> HttpResponse:
     """
     Products main page, that show table of all products
     """
-    products = Product.objects.all().order_by('id')
     categories = ProductCategory.objects.all().order_by('id')
+    products = Product.objects.all().order_by('id').select_related('category')
     context = {
         'products': products,
         'categories': categories,
@@ -31,7 +31,7 @@ def show_product_category(request: HttpRequest, category: str) -> HttpResponse:
         'category': category,
         'products': products,
     }
-    return render(request, 'panel/product-category.html', context=context)
+    return render(request, 'panel/product_category.html', context=context)
 
 
 def show_product(request: HttpRequest, product_id: str) -> HttpResponse:
@@ -55,7 +55,7 @@ def show_providers(request: HttpRequest) -> HttpResponse:
 
 def show_provider(request: HttpRequest, provider_id: int) -> HttpResponse:
     provider = get_object_or_404(Provider, id=provider_id)
-    products = provider.products.all()
+    products = provider.products.all().select_related('category')
     context = {
         'provider': provider,
         'products': products,
@@ -80,7 +80,7 @@ def show_client(request: HttpRequest, client_id: int) -> HttpResponse:
 
 
 def show_sales(request: HttpRequest) -> HttpResponse:
-    sales = Sale.objects.all()
+    sales = Sale.objects.all().select_related('product', 'client')
     context = {
         'sales': sales,
     }
@@ -96,7 +96,7 @@ def show_sale(request: HttpRequest, sale_id: int) -> HttpResponse:
 
 
 def show_deliveries(request: HttpRequest) -> HttpResponse:
-    deliveries = Delivery.objects.all()
+    deliveries = Delivery.objects.all().select_related('product', 'provider')
     context = {
         'deliveries': deliveries,
     }
