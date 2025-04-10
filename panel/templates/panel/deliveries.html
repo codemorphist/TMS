@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Deliveries{% endblock %}
+
+{% block content %}
+<div class="products-table">
+    <h1>Sales</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Provider</th>
+                <th>Price for one</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for delivery in deliveries %}
+            <tr>
+                <td>{{ delivery.id }}</td>
+                <td><a href="{{ delivery.product.get_absolute_url }}">{{ delivery.product.name }}</a></td>
+                <td><a href="{{ delivery.provider.get_absolute_url }}">{{ delivery.provider.name }}</a></td>
+                <td>${{ delivery.price_for_one }}</td>
+                <td>{{ delivery.count }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

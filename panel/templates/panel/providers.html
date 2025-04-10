@@ -1,17 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Product: {{ product.name }}{% endblock %}
+{% block title %}Providers{% endblock %}
 
 {% block content %}
 <div>
-    <h1>{{ product.name }}</h1>
-    <ul>
-        <li>Category: <a href="{% url 'product-category' product.category.slug %}">{{ product.category }}</a> </li>
-        <li>Description: {{ product.description }}</li>
-        <li>Price: ${{ product.price }}</li>
-        <li>Count: {{ product.count }}</li>
-    </ul>
-
     <div class="table-container">
         <h1>Providers</h1>
         <table>
@@ -22,7 +14,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for provider in product.providers.all %}
+            {% for provider in providers %}
             <tr>
                 <td>{{ provider.id }}</td>
                 <td><a href="{{ provider.get_absolute_url }}">{{ provider.name }}</a></td>
@@ -30,5 +22,6 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
 </div>
 {% endblock %}

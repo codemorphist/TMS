@@ -6,16 +6,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title%}TMS Panel{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'panel/css/style.css' %}">
     </head>
     <body>
         <header class="header-page">
-            <h1 class="header-heading"><a href="{% url 'panel' %}">TMS Panel</a></h1>
+            <h1 class="header-heading"><a href="{% url 'panel:panel' %}">TMS Panel</a></h1>
             <menu class="header-menu">
-                <li><a href="{% url 'products' %}">Products</a></li>
-                <li><a href="deliveries/">Deliveries</a></li>
-                <li><a href="sales/">Sales</a></li>
-                <li><a href="providers/">Providers</a></li>
-                <li><a href="clients/">Clients</a></li>
+                <li><a href="{% url 'panel:products' %}">Products</a></li>
+                <li><a href="{% url 'panel:providers' %}">Providers</a></li>
+                <li><a href="{% url 'panel:clients' %}">Clients</a></li>
+                <li><a href="{% url 'panel:sales' %}">Sales</a></li>
+                <li><a href="{% url 'panel:deliveries' %}">Deliveries</a></li>
             </menu>
         </header>
 
