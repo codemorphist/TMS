@@ -1,34 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'panel/basic/base.html' %}
 
 {% block title %}Products{% endblock %}
 
 {% block content %}
-<div class="product-categories-table">
-    <h1>Poducts Categories</h1>
-    <div class="table-container">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for cat in categories %}
-            <tr>
-                <td>{{ cat.id }}</td>
-                <td><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-<div class="products-table">
-    <h1>Poducts</h1>
-    <div class="table-container">
+    <div class="table-products">
+        <h1>Products</h1>
         <table>
             <thead>
             <tr>
@@ -53,6 +29,11 @@
             {% endfor %}
             </tbody>
         </table>
+        <button>
+            <a href="{% url 'panel:add-product' %}">+ Add new product</a>
+        </button>
     </div>
-</div>
+
+    {% include 'panel/basic/pagination.html' %}
+
 {% endblock %}

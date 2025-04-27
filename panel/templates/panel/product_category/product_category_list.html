@@ -1,0 +1,27 @@
+{% extends 'panel/basic/base.html' %}
+
+{% block title %}Product Categories{% endblock %}
+
+{% block content %}
+    <div class="table-product-categories">
+        <h1>Product Categories</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in product_categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'panel/basic/pagination.html' %}
+{% endblock %}

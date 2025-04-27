@@ -1,18 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'panel/basic/base.html' %}
 
 {% block title %}Product: {{ product.name }}{% endblock %}
 
 {% block content %}
 <div>
     <h1>{{ product.name }}</h1>
+
     <ul>
-        <li>Category: <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a> </li>
-        <li>Description: {{ product.description }}</li>
-        <li>Price: ${{ product.price }}</li>
-        <li>Count: {{ product.count }}</li>
+        <li><b>Category:</b> <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></li>
+        <li><b>Description:</b> {{ product.description }}</li>
+        <li><b>Price:</b> ${{ product.price }}</li>
+        <li><b>Count:</b> {{ product.count }}</li>
     </ul>
 
-    <div class="table-container">
+    <span><a href="{% url 'panel:edit-product' product.id %}">Edit</a></span>
+    <span><a href="{% url 'panel:edit-product' product.id %}">Delete</a></span>
+
+    <div class="table-providers">
         <h1>Providers</h1>
         <table>
             <thead>
