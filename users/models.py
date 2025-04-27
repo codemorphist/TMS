@@ -3,10 +3,13 @@ from django.contrib.auth.models import AbstractUser
 
 
 class PanelUser(AbstractUser):
+    CLIENT = 'client'
+    PROVIDER = 'provider'
+    OPERATOR = 'operator'
     USER_TYPES = {
-        'client': 'Client',
-        'provider': 'Provider',
-        'operator': 'Operator',
+        CLIENT: 'Client',
+        PROVIDER: 'Provider',
+        OPERATOR: 'Operator',
     }
 
     first_name = models.CharField(max_length=100, blank=False, null=False)
@@ -14,7 +17,7 @@ class PanelUser(AbstractUser):
     email = models.EmailField()
     user_type = models.CharField(max_length=20,
                                  choices=USER_TYPES,
-                                 default=USER_TYPES['client'])
+                                 default=OPERATOR)
 
     def __str__(self):
         return self.username
