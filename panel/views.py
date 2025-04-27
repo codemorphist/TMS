@@ -1,7 +1,10 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import FormView, UpdateView, DetailView
+from django.views.generic.list import ListView
 
 from panel.models import Product, ProductCategory, Provider, Client, Sale, Delivery
+from panel.forms import ProductForm, ProductCategoryForm
 
 
 def panel(request: HttpRequest) -> HttpResponse:
@@ -11,27 +14,17 @@ def panel(request: HttpRequest) -> HttpResponse:
     return render(request, 'panel/panel.html')
 
 
-def show_products(request: HttpRequest) -> HttpResponse:
-    """
-    Products main page, that show table of all products
-    """
-    categories = ProductCategory.objects.all().order_by('id')
-    products = Product.objects.all().order_by('id').select_related('category')
-    context = {
-        'products': products,
-        'categories': categories,
-    }
-    return render(request, 'panel/products.html', context=context)
+class ProductListView(ListView):
+    model = Product
+    paginate_by = 10
+    template_name = 'panel/product/product_list.html'
+    context_object_name = 'products'
 
 
-def show_product_category(request: HttpRequest, category: str) -> HttpResponse:
-    category = get_object_or_404(ProductCategory, slug=category)
-    products = category.products.all()
-    context = {
-        'category': category,
-        'products': products,
-    }
-    return render(request, 'panel/product_category.html', context=context)
+class ProductView(DetailView):
+    model = Product
+    template_name = 'panel/product/product_view.html'
+    context_object_name = 'product'
 
 
 def show_product(request: HttpRequest, product_id: str) -> HttpResponse:
@@ -42,7 +35,57 @@ def show_product(request: HttpRequest, product_id: str) -> HttpResponse:
     context = {
         'product': product,
     }
-    return render(request, 'panel/product.html', context=context)
+    return render(request, 'panel/product/product_view.html', context=context)
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['name', 'category', 'description', 'price', 'count', 'providers']
+    template_name = 'panel/product/product_edit.html'
+
+
+class ProductFormView(FormView):
+    template_name = 'panel/product/product_form.html'
+    form_class = ProductForm
+
+    def form_valid(self, form):
+        self.product = form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.product.get_absolute_url()
+
+
+class ProductCategoryListView(ListView):
+    model = ProductCategory
+    paginate_by = 10
+    template_name = 'panel/product_category/product_category_list.html'
+    context_object_name = 'product_categories'
+
+
+def show_product_category(request: HttpRequest, category: str) -> HttpResponse:
+    category = get_object_or_404(ProductCategory, slug=category)
+    products = category.products.all()
+    context = {
+        'category': category,
+        'products': products,
+    }
+    return render(request,
+                  'panel/product_category/product_category_view.html',
+                  context=context)
+
+def add_product_category(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        form = ProductCategoryForm(request.POST)
+        if form.is_valid():
+            new_category = form
+            return HttpResponseRedirect(new_category.get_absolute_url())
+
+    form = ProductCategoryForm()
+    context = {'form': form}
+    return render(request,
+                  'panel/product_category/product_category_add.html',
+                  context=context)
 
 
 def show_providers(request: HttpRequest) -> HttpResponse:

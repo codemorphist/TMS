@@ -22,4 +22,4 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', include('panel.urls'), name='panel'),
-] + debug_toolbar_urls()
+] # + debug_toolbar_urls()

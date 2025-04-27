@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title%}TMS Panel{% endblock %}</title>
+        {#        <link rel="stylesheet" href="{% static 'panel/css/reset.css' %}">#}
+        {#        <link rel="stylesheet" href="{% static 'panel/css/style.css' %}">#}
+        {% block link %}
+        {% endblock %}
+    <body>
+        <div class="body">
+            {% include 'panel/basic/header.html' %}
+
+            <main class="main">
+                <div class="content">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+
+            {% include 'panel/basic/footer.html' %}
+        </div>
+    </body>
+</html>

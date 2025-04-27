@@ -1,0 +1,12 @@
+{% extends 'panel/basic/base.html' %}
+
+{% block title %}Add product{% endblock %}
+
+{% block content %}
+    <h1>Add new product</h1>
+    <form method="POST" action="{% url 'panel:add-product' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add product">
+    </form>
+{% endblock %}
