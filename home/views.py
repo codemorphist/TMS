@@ -3,8 +3,6 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView
 
-from users.utils import RoleBasedMixin
-
 
 def home(request: HttpRequest) -> HttpResponse:
     return render(request, 'home/home.html')

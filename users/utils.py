@@ -1,4 +1,7 @@
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from django.views import View
 
 from users.models import PanelUser
 
@@ -8,6 +11,9 @@ class RegisterMixin:
 
 
 class AnonymousRequiredMixin:
+    """
+    Require that the user is authenticated, else reddirect
+    """
     redirect_url = '/'
 
     def dispatch(self, request, *args, **kwargs):
@@ -16,9 +22,9 @@ class AnonymousRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class RoleBasedMixin:
+class RoleBasedView(View):
     """
-    Return View based on user role
+    Return View based on the user role
 
     Tips:
         * In `views` define role and View
@@ -34,20 +40,20 @@ class RoleBasedMixin:
     no_role = None
 
     __default_no_auth__ = 'users:login'
-    __default_no_role__ = 'users:login'
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        print('In dispatch')
         user = request.user
 
         if not user.is_authenticated:
             if self.no_auth is None:
                 return redirect(self.__default_no_auth__)
-            return self.no_auth.as_view()(request, *args, **kwargs)
+            return self.no_auth(request, *args, **kwargs)
 
         if user.role not in self.views:
             if self.no_role is None:
-                return redirect(self.__default_no_role__)
-            return self.no_role.as_view()(request, *args, **kwargs)
+                raise PermissionDenied()
+            return self.no_role(request, *args, **kwargs)
 
         view = self.views[user.role]
-        return view.as_view()(request, *args, **kwargs)
+        return view(request, *args, **kwargs)

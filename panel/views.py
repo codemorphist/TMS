@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import FormView, UpdateView, DetailView, TemplateView
 from django.views.generic.list import ListView
 
-from users.utils import RoleBasedMixin
+from users.utils import RoleBasedView
 
 
 class ClientPanelView(TemplateView):
@@ -20,9 +20,9 @@ class OperatorPanelView(TemplateView):
     template_name = 'panel/panel/operator.html'
 
 
-class PanelView(View, RoleBasedMixin):
+class PanelView(RoleBasedView):
     views = {
-        'client': ClientPanelView,
-        'provider': ProviderPanelView,
-        'operator': OperatorPanelView,
+        'client': ClientPanelView.as_view(),
+        'provider': ProviderPanelView.as_view(),
+        'operator': OperatorPanelView.as_view(),
     }
