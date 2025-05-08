@@ -1,15 +1,8 @@
-{% extends 'basic/base.html' %}
+{% extends 'panel/default/base.html' %}
 
 {% block title %}TMS Panel{% endblock %}
 
+
 {% block content %}
-    <div>
-        <span><a href="">{{ user }}</a></span>
-        <span>
-            <form method="post" action="{% url 'users:logout' %}">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        </span>
-    </div>
+
 {% endblock %}

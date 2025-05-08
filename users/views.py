@@ -1,41 +1,49 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.contrib.auth.models import Group
+
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.urls import reverse
 
 from users.forms import PanelUserCreationForm
-from users.models import PanelUser
-from users.utils import RegisterMixin
+from users.models import PanelUser, Role
+from users.utils import RegisterMixin, AnonymousRequiredMixin
 
 
-class PanelUserLoginView(LoginView):
+class PanelUserLoginView(AnonymousRequiredMixin, LoginView):
     template_name = 'users/login.html'
+    redirect_url = 'users:profile'
 
     def get_success_url(self):
         return reverse('panel:panel')
 
 
-class PanelUserLogoutView(LogoutView):
+class PanelUserLogoutView(LoginRequiredMixin, LogoutView):
     next_page = 'users:login'
 
 
-class RegisterPanelUser(RegisterMixin, CreateView):
+class RegisterPanelUser(AnonymousRequiredMixin, RegisterMixin, CreateView):
     model = PanelUser
     form_class = PanelUserCreationForm
     template_name = 'users/register.html'
-    user_type = None
+    user_group = None
+    redirect_url = 'users:profile'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if self.user_role not in Role.values:
+            raise TypeError(f'Invalid user role: {self.user_role}')
+
+        self.object.role = self.user_role
+        self.object.save()
+
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        match self.user_type:
-            case PanelUser.CLIENT:
-                title = 'Register Client'
-            case PanelUser.PROVIDER:
-                title = 'Register Provider'
-            case _:
-                raise TypeError('Invalid user type')
-        context['title'] = title
+        context['role'] = self.user_role.label
         return context
 
     def get_success_url(self):
@@ -43,8 +51,12 @@ class RegisterPanelUser(RegisterMixin, CreateView):
 
 
 class RegisterClient(RegisterPanelUser):
-    user_type = PanelUser.CLIENT
+    user_role = Role.CLIENT
 
 
 class RegisterProvider(RegisterPanelUser):
-    user_type = PanelUser.PROVIDER
+    user_role = Role.PROVIDER
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/profile.html'
