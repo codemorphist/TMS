@@ -4,7 +4,7 @@ import panel.views as views
 
 app_name = 'panel'
 urlpatterns = [
-    path('', views.panel, name='panel'),
+    path('', views.PanelView.as_view(), name='panel'),
 ]
 
 
