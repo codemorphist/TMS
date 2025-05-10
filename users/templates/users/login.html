@@ -4,6 +4,7 @@
 
 {% block content %}
     <div class="form-container">
+        <h2 class="form-header">Log in</h2>
         <form method="post">
             {% csrf_token %}
 
@@ -18,13 +19,15 @@
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}
-                        <div class="error">
-                            {{ field.errors|striptags }}
-                        </div>
+                        <ul class="error">
+                            {% for error in field.errors %}
+                                <li>{{ error | escape }}</li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
                 </div>
             {% endfor %}
-            <button class="form-button" type="submit">Register</button>
+            <button class="blue-button form-button" type="submit">Log in</button>
         </form>
 
         <div class="form-links">

@@ -10,16 +10,20 @@
         {% block head %}
         {% endblock %}
     <body>
+        {% if user.is_authenticated %}
+            {% include 'panel/default/header.html' %}
+        {% else %}
             {% include 'default/header.html' %}
-            <hr>
+        {% endif %}
+        <hr>
 
-            <main class="main">
-                <div class="content">
-                    {% block content %}{% endblock %}
-                </div>
-            </main>
+        <main class="main">
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
 
-            <hr>
-            {% include 'default/footer.html' %}
+        <hr>
+        {% include 'default/footer.html' %}
     </body>
 </html>
