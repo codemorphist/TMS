@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
 </head>
 <body>
-    <div class="content">
-        <header>
-            <h1>Trade Management System</h1>
-        </header>
+<div class="content">
+    <header>
+        <h1>Trade Management System</h1>
+    </header>
 
-        <main>
-            <p>TMS is app for manage you trades</p>
-            <a href="{% url 'panel:panel' %}">Go to panel</a>
-        </main>
+    <main>
+        <p>TMS is app for manage you trades</p>
+        <a href="{% url 'panel:panel' %}">Go to panel</a>
+    </main>
 
-        {% include 'default/footer.html' %}
-    </div>
+    {% include 'default/footer.html' %}
+</div>
 </body>
 </html>

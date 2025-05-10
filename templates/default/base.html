@@ -1,25 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{% block title%}TMS Panel{% endblock %}</title>
-        {% block link %}
-        {% endblock %}
-    <body>
-        <div class="body">
-            {% include 'default/header.html' %}
-            <hr>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}TMS Panel{% endblock %}</title>
+    {% block link %}
+    {% endblock %}
+<body>
+<div class="body">
+    {% include 'default/header.html' %}
+    <hr>
 
-            <main class="main">
-                <div class="content">
-                    {% block content %}{% endblock %}
-                </div>
-            </main>
-
-            <hr>
-            {% include 'default/footer.html' %}
+    <main class="main">
+        <div class="content">
+            {% block content %}{% endblock %}
         </div>
-    </body>
+    </main>
+
+    <hr>
+    {% include 'default/footer.html' %}
+</div>
+</body>
 </html>

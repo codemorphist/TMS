@@ -1,13 +1,6 @@
-from typing import Callable
-
-from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
 from django.views import View
-
-from users.models import PanelUser, Role
 
 
 class RegisterMixin:

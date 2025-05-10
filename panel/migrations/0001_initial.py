@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -21,7 +20,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField(blank=True)),
                 ('count', models.IntegerField(default=0)),
-                ('provider', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to=settings.AUTH_USER_MODEL)),
+                ('provider', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products',
+                                               to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

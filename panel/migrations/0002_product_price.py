@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('panel', '0001_initial'),
     ]
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='price',
-            field=models.DecimalField(decimal_places=2, default=0, max_digits=10, validators=[django.core.validators.MinValueValidator(0.0)]),
+            field=models.DecimalField(decimal_places=2, default=0, max_digits=10,
+                                      validators=[django.core.validators.MinValueValidator(0.0)]),
             preserve_default=False,
         ),
     ]
