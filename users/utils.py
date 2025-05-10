@@ -1,9 +1,11 @@
+from pickletools import read_decimalnl_short
 from typing import Callable
 
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -52,6 +54,10 @@ class RoleBasedView(View):
             if self.no_auth is None:
                 return redirect(self.__default_no_auth__)
             return self.no_auth(request, *args, **kwargs)
+
+        print(user.role)
+        if user.role == Role.ADMIN:
+            return redirect('/admin/')
 
         if user.role not in self.views:
             if self.no_role is None:
