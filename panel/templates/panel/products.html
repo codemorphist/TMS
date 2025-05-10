@@ -15,7 +15,7 @@
                 <tbody>
                 {% for product in products %}
                     <tr>
-                        <td><a href="{% url 'panel:product' product.id %}">{{ product.name }}</a></td>
+                        <td><a class="default-link" href="{% url 'panel:product' product.id %}">{{ product.name }}</a></td>
                         <td>{{ product.description }}</td>
                         <td>{{ product.count }}</td>
                         <td>${{ product.price }}</td>
@@ -28,6 +28,6 @@
         <p>No products found!</p>
     {% endif %}
 
-    <a href="{% url 'panel:add-product' %}">Add product</a>
+    <a class="default-button" href="{% url 'panel:add-product' %}">Add product</a>
 
 {% endblock %}
