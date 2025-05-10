@@ -17,7 +17,7 @@ class ProviderPanelView(TemplateView):
     template_name = 'panel/panel.html'
 
 
-class OperatorPanelView(TemplateView)ni:
+class OperatorPanelView(TemplateView):
     template_name = 'panel/panel.html'
 
 
