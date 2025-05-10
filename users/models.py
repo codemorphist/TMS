@@ -15,7 +15,7 @@ class PanelUser(AbstractUser):
     first_name = models.CharField(max_length=100, blank=False, null=False)
     last_name = models.CharField(max_length=100, blank=False, null=False)
     email = models.EmailField()
-    role = models.CharField(choices=Role.choices, max_length=100, blank=False, null=False, default=Role.OPERATOR)
+    role = models.CharField(choices=Role.choices, max_length=100, blank=False, null=False, default=Role.USER)
 
     def __str__(self):
         return self.username
