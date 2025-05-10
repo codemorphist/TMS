@@ -1,0 +1,21 @@
+{% extends 'default/base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="Log in"></p>
+        <p><input type="hidden" name="next" value="{{ next }}"> </p>
+    </form>
+
+    <div>
+        <span><a href="{% url 'users:register-client' %}">Register as client</a></span>
+        <span><a href="{% url 'users:register-provider' %}">Register as Provider</a></span>
+    </div>
+{% endblock %}

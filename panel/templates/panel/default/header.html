@@ -1,0 +1,27 @@
+<header class="header">
+    <h1><a href="{% url 'panel:panel' %}">TMS Panel</a></h1>
+    {% if user %}
+        <ul>
+            {% if user.role == 'admin' %}
+                <li><a href="">Product catalog</a></li>
+                <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+            {% elif user.role == 'operator' %}
+                <li><a href="">Product catalog</a></li>
+                <li><a href="">Products</a></li>
+                <li><a href="">Sales</a></li>
+                <li><a href="">Deliveries</a></li>
+                <li><a href="">Clients</a></li>
+                <li><a href="">Providers</a></li>
+            {% elif user.role == 'provider' %}
+                <li><a href="">My products</a></li>
+                <li><a href="">My deliveries</a></li>
+            {% elif user.role == 'client' %}
+                <li><a href="">Products catalog</a></li>
+                <li><a href="">My orders</a></li>
+            {% else %}
+                <li><a href="">Products catalog</a></li>
+            {% endif %}
+            <li><a href="{% url 'users:profile' %}">Profile</a></li>
+        </ul>
+    {% endif %}
+</header>
