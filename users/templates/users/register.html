@@ -1,23 +1,33 @@
 {% extends 'default/base.html' %}
 
 {% block content %}
-    <h1>Register as {{ role }}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {% for field in form %}
-            <p>
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.errors %}
-                    <div class="error">{{ field.errors }}</div>
-                {% endif %}
-            </p>
-        {% endfor %}
-        <p><input type="submit" value="Register"></p>
-    </form>
+
+        <div class="form-container">
+            <h2 class="form-header">Register as {{ role }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button class="form-button" type="submit">Register</button>
+        </form>
+
+            <div class="form-links">
+                <div>
+                    <span>Already registered?</span>
+                    <a class="default-link" href="{% url 'users:login' %}">Log in</a>
+                </div>
+            </div>
+    </div>
 
     <div>
-        <span>Already registered?</span>
-        <span><a href="{% url 'users:login' %}">Log in</a></span>
     </div>
 {% endblock %}

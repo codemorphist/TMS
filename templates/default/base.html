@@ -5,10 +5,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{% block title%}TMS Panel{% endblock %}</title>
-        {% block link %}
+        <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        {% block head %}
         {% endblock %}
     <body>
-        <div class="body">
             {% include 'default/header.html' %}
             <hr>
 
@@ -20,6 +21,5 @@
 
             <hr>
             {% include 'default/footer.html' %}
-        </div>
     </body>
 </html>
