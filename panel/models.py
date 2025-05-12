@@ -15,11 +15,14 @@ class ProductCategory(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products', null=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True,
+                                 related_name='products')
     description = models.TextField(blank=True)
     count = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.0)])
-    provider = models.ForeignKey(PanelUser, on_delete=models.CASCADE, related_name='products', null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2,
+                                validators=[MinValueValidator(0.0)])
+    provider = models.ForeignKey(PanelUser, on_delete=models.CASCADE, null=True, blank=True,
+                                 related_name='products')
 
     def get_absolute_url(self):
         return reverse('panel:product', args=(self.pk,))

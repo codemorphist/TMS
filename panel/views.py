@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import Http404
 from django.urls import reverse
 from django.views.generic import TemplateView, DetailView, UpdateView, DeleteView
@@ -118,14 +119,26 @@ class ProviderProductDeleteView(DeleteView):
 
 class OperatorAddProductView(CreateView):
     model = Product
-    fields = ['name', 'category', 'description', 'price', 'count']
+    fields = ['name', 'category', 'description', 'price', 'count', 'provider']
     template_name = 'panel/default/form.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        UserModel = get_user_model()
+        form.fields['provider'].queryset = UserModel.objects.filter(role=Role.PROVIDER)
+        return form
 
 
 class OperatorProductEditView(UpdateView):
     model = Product
-    fields = ['name', 'category', 'description', 'price', 'count']
+    fields = ['name', 'category', 'description', 'price', 'count', 'provider']
     template_name = 'panel/default/form.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        UserModel = get_user_model()
+        form.fields['provider'].queryset = UserModel.objects.filter(role=Role.PROVIDER)
+        return form
 
 
 class OperatorProductDeleteView(DeleteView):
@@ -139,8 +152,21 @@ class OperatorProductDeleteView(DeleteView):
 class AddProductView(RoleBasedView):
     views = {
         Role.PROVIDER: ProviderAddProductView.as_view(),
-        # TODO: Role.OPERATOR
-        # TODO: Role.CLIENT
+        Role.OPERATOR: OperatorAddProductView.as_view(),
+    }
+
+
+class ProductEditView(RoleBasedView):
+    views = {
+        Role.PROVIDER: ProviderProductEditView.as_view(),
+        Role.OPERATOR: OperatorProductEditView.as_view(),
+    }
+
+
+class ProductDeleteView(RoleBasedView):
+    views = {
+        Role.PROVIDER: ProviderProductDeleteView.as_view(),
+        Role.OPERATOR: OperatorProductDeleteView.as_view(),
     }
 
 
