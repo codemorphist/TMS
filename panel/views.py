@@ -41,9 +41,16 @@ class ProviderProductView(DetailView):
         return obj
 
 
+class OperatorProductView(DetailView):
+    model = Product
+    template_name = 'panel/product.html'
+    context_object_name =  'product'
+
+
 class ProductView(RoleBasedView):
     views = {
         Role.PROVIDER: ProviderProductView.as_view(),
+        Role.OPERATOR: OperatorProductView.as_view(),
     }
 
 
@@ -56,9 +63,16 @@ class ProviderProductsView(ListView):
         return self.request.user.products.all()
 
 
+class OperatorProductsView(ListView):
+    model = Product
+    template_name = 'panel/products.html'
+    context_object_name = 'products'
+
+
 class ProductsView(RoleBasedView):
     views = {
         Role.PROVIDER: ProviderProductsView.as_view(),
+        Role.OPERATOR: OperatorProductsView.as_view(),
     }
 
 
@@ -96,6 +110,26 @@ class ProviderProductDeleteView(DeleteView):
         if obj.provider != self.request.user:
             raise Http404()
         return obj
+
+    def get_success_url(self):
+        return reverse('panel:products')
+
+
+class OperatorAddProductView(CreateView):
+    model = Product
+    fields = ['name', 'category', 'description', 'price', 'count']
+    template_name = 'panel/default/form.html'
+
+
+class OperatorProductEditView(UpdateView):
+    model = Product
+    fields = ['name', 'category', 'description', 'price', 'count']
+    template_name = 'panel/default/form.html'
+
+
+class OperatorProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'panel/default/delete_confirm.html'
 
     def get_success_url(self):
         return reverse('panel:products')

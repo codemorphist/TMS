@@ -12,6 +12,9 @@
                 <th>Description</th>
                 <th>Count</th>
                 <th>Price</th>
+                {% if user.role == "operator" %}
+                    <th>Provider</th>
+                {% endif %}
                 </thead>
                 <tbody>
                 {% for product in products %}
@@ -21,6 +24,9 @@
                         <td>{{ product.description }}</td>
                         <td>{{ product.count }}</td>
                         <td>${{ product.price }}</td>
+                        {% if user.role == "operator" %}
+                            <td><a href="">{{ product.provider }}</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
