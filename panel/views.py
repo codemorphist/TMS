@@ -4,9 +4,9 @@ from django.views.generic import TemplateView, DetailView, UpdateView, DeleteVie
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from panel.models import Product
+from panel.models import Product, CatalogProduct
 from users.models import Role
-from users.utils import RoleBasedView
+from users.utils import RoleBasedView, RoleRequiredMixin
 
 
 class ClientPanelView(TemplateView):
@@ -58,6 +58,7 @@ class ProviderProductsView(ListView):
     model = Product
     template_name = 'panel/products.html'
     context_object_name = 'products'
+    paginate_by = 10
 
     def get_queryset(self):
         return self.request.user.products.all()
@@ -141,3 +142,13 @@ class AddProductView(RoleBasedView):
         # TODO: Role.OPERATOR
         # TODO: Role.CLIENT
     }
+
+
+class CatalogProductsView(RoleRequiredMixin, ListView):
+    model = CatalogProduct
+    template_name = 'panel/catalog.html'
+    context_object_name = 'products'
+    paginate_by = 10
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+
+

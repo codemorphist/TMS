@@ -1,0 +1,21 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Catalog{% endblock %}
+
+{% block content %}
+    {% if products %}
+        {% for product in products %}
+            <div>
+                <h3>{{ product.name }}</h3>
+                <ul>
+                    <li>Price: ${{ product.price }}</li>
+                    {% if user.role == "operator" %}
+                        <li>Count: ${{ product.count }}</li>
+                    {% endif  %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Catalog is empty for now.</p>
+    {% endif %}
+{% endblock %}

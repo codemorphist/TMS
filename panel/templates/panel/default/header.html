@@ -6,7 +6,7 @@
                 <li><a href="">Product catalog</a></li>
                 <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
             {% elif user.role == 'operator' %}
-                <li><a href="">Product catalog</a></li>
+                <li><a href="{% url 'panel:catalog' %}">Product catalog</a></li>
                 <li><a href="{% url 'panel:products' %}">Products</a></li>
                 <li><a href="">Sales</a></li>
                 <li><a href="">Deliveries</a></li>
@@ -16,10 +16,8 @@
                 <li><a href="{% url 'panel:products' %}">My products</a></li>
                 <li><a href="">My deliveries</a></li>
             {% elif user.role == 'client' %}
-                <li><a href="">Products catalog</a></li>
+                <li><a href="{% url 'panel:catalog' %}">Product catalog</a></li>
                 <li><a href="">My orders</a></li>
-            {% else %}
-                <li><a href="">Products catalog</a></li>
             {% endif %}
             <li><a href="{% url 'users:profile' %}">Profile</a></li>
         </ul>

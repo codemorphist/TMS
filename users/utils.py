@@ -3,7 +3,7 @@ from typing import Callable
 
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -25,6 +25,18 @@ class AnonymousRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(self.redirect_url)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RoleRequiredMixin:
+    allowed_roles = []
+
+    def dispatch(self, request, *args, **kwargs):
+        role = getattr(request.user, 'role', None)
+
+        if role not in self.allowed_roles:
+            raise Http404()
+
         return super().dispatch(request, *args, **kwargs)
 
 

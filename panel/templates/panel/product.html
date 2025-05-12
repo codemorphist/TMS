@@ -11,7 +11,7 @@
             <li><b>Price:</b> ${{ product.price }}</li>
             <li><b>Count:</b> {{ product.count }}</li>
             {% if user.role == "operator" %}
-                <li><b>Provider:</b> <a href="">{{ product.provider}}</a></li>
+                <li><b>Provider:</b> <a href="">{{ product.provider }}</a></li>
             {% endif %}
         </ul>
         <a href="{% url 'panel:edit-product' product.pk %}">Edit product</a>
