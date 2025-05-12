@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.urls import reverse
-from django.views.generic import TemplateView, DetailView, UpdateView
+from django.views.generic import TemplateView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
@@ -64,7 +64,7 @@ class ProductsView(RoleBasedView):
 
 class ProviderAddProductView(CreateView):
     model = Product
-    fields = ['name', 'description', 'price', 'count']
+    fields = ['name', 'category', 'description', 'price', 'count']
     template_name = 'panel/default/form.html'
 
     def form_valid(self, form):
@@ -79,6 +79,26 @@ class ProviderProductEditView(UpdateView):
     model = Product
     fields = ['name', 'category', 'description', 'price', 'count']
     template_name = 'panel/default/form.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.provider != self.request.user:
+            raise Http404()
+        return obj
+
+
+class ProviderProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'panel/default/delete_confirm.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.provider != self.request.user:
+            raise Http404()
+        return obj
+
+    def get_success_url(self):
+        return reverse('panel:products')
 
 
 class AddProductView(RoleBasedView):

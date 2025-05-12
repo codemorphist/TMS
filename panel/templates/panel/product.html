@@ -3,5 +3,19 @@
 {% block title %}TMS Panel | Product {{ product.name }}{% endblock %}
 
 {% block content %}
-    {{ product }}
+    <div class="product-info">
+        <h1>{{ product.name }}</h1>
+        <ul>
+            {% if not product.category %}
+                <li><b>Category:</b> -</li>
+            {% else %}
+                <li><b>Category:</b><a href=""> {{ product.category }}</a></li>
+            {% endif %}
+            <li><b>Description:</b> {{ product.description | escape }}</li>
+            <li><b>Price:</b> ${{ product.price }}</li>
+            <li><b>Count:</b> {{ product.count }}</li>
+        </ul>
+        <a href="{% url 'panel:edit-product' product.pk %}">Edit product</a>
+        <a href="{% url 'panel:delete-product' product.pk %}">Delete product</a>
+    </div>
 {% endblock %}
