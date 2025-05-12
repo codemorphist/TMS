@@ -22,6 +22,7 @@ class OperatorPanelView(TemplateView):
     template_name = 'panel/panel.html'
 
 
+# TODO: Refactor and delete to TemplateView
 class PanelView(RoleBasedView):
     views = {
         Role.CLIENT: ClientPanelView.as_view(),
@@ -178,3 +179,38 @@ class CatalogProductsView(RoleRequiredMixin, ListView):
     allowed_roles = [Role.CLIENT, Role.OPERATOR]
 
 
+class CatalogProductView(RoleRequiredMixin, DetailView):
+    model = CatalogProduct
+    template_name = 'panel/catalog_product.html'
+    context_object_name = 'product'
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+
+
+class AddCatalogProductView(RoleRequiredMixin, CreateView):
+    model = CatalogProduct
+    fields = ['product', 'price', 'count']
+    template_name = 'panel/default/form.html'
+    allowed_roles = [Role.OPERATOR]
+
+    def form_valid(self, form):
+        product = form.cleaned_data['product']
+        if CatalogProduct.objects.filter(product=product).exists():
+            form.add_error('product', 'This product is already in the catalog.')
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+
+class CatalogProductEditView(RoleRequiredMixin, UpdateView):
+    model = CatalogProduct
+    fields = ['price', 'count']
+    template_name = 'panel/default/form.html'
+    allowed_roles = [Role.OPERATOR]
+
+
+class CatalogProductDeleteView(RoleRequiredMixin, DeleteView):
+    model = CatalogProduct
+    template_name = 'panel/default/delete_confirm.html'
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+
+    def get_success_url(self):
+        return reverse('panel:catalog')

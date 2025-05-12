@@ -6,7 +6,7 @@
     {% if products %}
         {% for product in products %}
             <div>
-                <h3>{{ product.name }}</h3>
+                <h3><a href="{{ product.get_absolute_url }}">{{ product.product.name }}</a></h3>
                 <ul>
                     <li>Price: ${{ product.price }}</li>
                     {% if user.role == "operator" %}
@@ -18,4 +18,10 @@
     {% else %}
         <p>Catalog is empty for now.</p>
     {% endif %}
+
+    {% if user.role == "operator" %}
+        <a href="{% url "panel:add-catalog-product" %}">Add product</a>
+    {% endif %}
+
+    {% include 'default/pagination.html' %}
 {% endblock %}

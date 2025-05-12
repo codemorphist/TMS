@@ -13,6 +13,10 @@ urlpatterns = [
     path('product/detele/<int:pk>', ProductDeleteView.as_view(), name='delete-product'),
 
     path('catalog/', CatalogProductsView.as_view(), name='catalog'),
+    path('catalog/add-product/', AddCatalogProductView.as_view(), name='add-catalog-product'),
+    path('catalog/product/<int:pk>', CatalogProductView.as_view(), name='catalog-product'),
+    path('catalog/product/edit/<int:pk>', CatalogProductEditView.as_view(), name='edit-catalog-product'),
+    path('catalog/product/delete/<int:pk>', CatalogProductDeleteView.as_view(), name='delete-catalog-product'),
 ]
 
 
