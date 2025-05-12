@@ -68,6 +68,7 @@ class ProviderProductsView(ListView):
 
 class OperatorProductsView(ListView):
     model = Product
+    paginate_by = 10
     template_name = 'panel/products.html'
     context_object_name = 'products'
 
