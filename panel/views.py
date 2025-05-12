@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.urls import reverse
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, UpdateView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
@@ -73,6 +73,12 @@ class ProviderAddProductView(CreateView):
 
     def get_success_url(self):
         return reverse('panel:products')
+
+
+class ProviderProductEditView(UpdateView):
+    model = Product
+    fields = ['name', 'category', 'description', 'price', 'count']
+    template_name = 'panel/default/form.html'
 
 
 class AddProductView(RoleBasedView):

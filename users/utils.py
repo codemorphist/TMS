@@ -55,7 +55,6 @@ class RoleBasedView(View):
                 return redirect(self.__default_no_auth__)
             return self.no_auth(request, *args, **kwargs)
 
-        print(user.role)
         if user.role == Role.ADMIN:
             return redirect('/admin/')
 
