@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db.models import F
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
-from django.test import Client
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, DetailView, UpdateView, DeleteView
@@ -176,7 +175,6 @@ class ProductDeleteView(RoleBasedView):
         Role.OPERATOR: OperatorProductDeleteView.as_view(),
     }
 
-# da
 
 class CatalogProductsView(RoleRequiredMixin, ListView):
     model = CatalogProduct
@@ -295,4 +293,6 @@ class OperatorSalesView(RoleRequiredMixin, ListView):
     model = ClientOrder
     template_name = 'panel/operator_sales.html'
     context_object_name = 'sales'
+    paginate_by = 10
     allowed_roles = [Role.OPERATOR]
+

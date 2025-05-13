@@ -26,6 +26,8 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            {% include 'default/pagination.html' %}
         {% else %}
             <p>No any order here.</p>
         {% endif %}
