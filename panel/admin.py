@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from panel.models import Product
+from panel.models import ProductCategory, Product, CatalogProduct
 from users.models import PanelUser
+
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -11,4 +12,6 @@ class ProductAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+admin.site.register(ProductCategory)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(CatalogProduct)

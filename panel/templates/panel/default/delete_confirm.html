@@ -1,0 +1,11 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}Confirm deletion?{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <input type="submit" value="Confirm">
+    </form>
+{% endblock %}

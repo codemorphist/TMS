@@ -1,6 +1,15 @@
+from pickletools import read_decimalnl_short
+from typing import Callable
+
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+
+from users.models import PanelUser, Role
 
 
 class RegisterMixin:
@@ -16,6 +25,18 @@ class AnonymousRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(self.redirect_url)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class RoleRequiredMixin:
+    allowed_roles = []
+
+    def dispatch(self, request, *args, **kwargs):
+        role = getattr(request.user, 'role', None)
+
+        if role not in self.allowed_roles:
+            raise Http404()
+
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -45,6 +66,9 @@ class RoleBasedView(View):
             if self.no_auth is None:
                 return redirect(self.__default_no_auth__)
             return self.no_auth(request, *args, **kwargs)
+
+        if user.role == Role.ADMIN:
+            return redirect('/admin/')
 
         if user.role not in self.views:
             if self.no_role is None:

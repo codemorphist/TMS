@@ -1,5 +1,7 @@
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+
+from users.models import PanelUser
 
 
 class PanelUserCreationForm(UserCreationForm):
@@ -15,3 +17,15 @@ class PanelUserCreationForm(UserCreationForm):
             'last_name': 'Last Name',
             'email': 'E-mail',
         }
+
+
+class AdminPanelUserCreationForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "email", "first_name", "last_name", "role")
+
+
+class AdminPanelUserChangeForm(UserChangeForm):
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "email", "first_name", "last_name", "role", "is_active", "is_staff")

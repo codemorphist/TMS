@@ -8,17 +8,25 @@
             <table>
                 <thead>
                 <th>Name</th>
+                <th>Category</th>
                 <th>Description</th>
                 <th>Count</th>
                 <th>Price</th>
+                {% if user.role == "operator" %}
+                    <th>Provider</th>
+                {% endif %}
                 </thead>
                 <tbody>
                 {% for product in products %}
                     <tr>
-                        <td><a class="default-link" href="{% url 'panel:product' product.id %}">{{ product.name }}</a></td>
+                        <td><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
+                        <td><a href="">{{ product.category }}</a></td>
                         <td>{{ product.description }}</td>
                         <td>{{ product.count }}</td>
                         <td>${{ product.price }}</td>
+                        {% if user.role == "operator" %}
+                            <td><a href="">{{ product.provider }}</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -28,6 +36,8 @@
         <p>No products found!</p>
     {% endif %}
 
-    <a class="default-button" href="{% url 'panel:add-product' %}">Add product</a>
+    <a href="{% url 'panel:add-product' %}">Add product</a>
+
+    {% include 'default/pagination.html' %}
 
 {% endblock %}

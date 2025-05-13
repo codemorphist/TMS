@@ -1,0 +1,37 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %} TMS Panel | Client Orders{% endblock %}
+
+{% block content %}
+    <div>
+        {% if sales %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Product</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale.user }}</td>
+                        <td>{{ sale.product }}</td>
+                        <td>{{ sale.count }}</td>
+                        <td>{{ sale.product.price }}</td>
+                        <td>{{ sale.total_price }}</td>
+                        <td>{{ sale.status }}</td>
+                        <td><a href="{% url 'panel:client-order' sale.pk %}">View order</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No any sales here.</p>
+        {% endif %}
+    </div>
+{% endblock %}

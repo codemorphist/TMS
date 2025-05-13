@@ -1,0 +1,27 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}
+    {% if user.role == 'client' %}
+        TMS Panel | Order
+    {% else %}
+        TMS Panel | Sale
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <ul>
+            <li><b>Product:</b> {{ order.product }}</li>
+            <li><b>Count:</b> {{ order.count }}</li>
+            <li><b>Price:</b> {{ order.product.price }}</li>
+            <li><b>Total price:</b> {{ order.total_price }}</li>
+            <li><b>Status:</b> {{ order.status }}</li>
+        </ul>
+        {% if order.status == 'in_progress' %}
+            <a href="{% url 'panel:cancel-client-order' order.pk %}">Cancel order</a>
+        {% endif %}
+        {% if user.role == 'operator' %}
+            <a href="{% url 'panel:edit-client-order' order.pk %}">Edit status</a>
+        {% endif %}
+    </div>
+{% endblock %}
