@@ -15,10 +15,13 @@ urlpatterns = [
     path('catalog/', CatalogProductsView.as_view(), name='catalog'),
     path('catalog/add-product/', AddCatalogProductView.as_view(), name='add-catalog-product'),
     path('catalog/product/<int:pk>', CatalogProductView.as_view(), name='catalog-product'),
-    path('catalog/product/edit/<int:pk>', CatalogProductEditView.as_view(), name='edit-catalog-product'),
-    path('catalog/product/delete/<int:pk>', CatalogProductDeleteView.as_view(), name='delete-catalog-product'),
+    path('catalog/product/<int:pk>/edit/', CatalogProductEditView.as_view(), name='edit-catalog-product'),
+    path('catalog/product/<int:pk>/delete/', CatalogProductDeleteView.as_view(), name='delete-catalog-product'),
 
     path('orders/', ClientOrdersViews.as_view(), name='client-orders'),
+    path('order/<int:pk>/', ClientOrderView.as_view(), name='client-order'),
+    path('order/<int:pk>/edit', ClientOrderEditView.as_view(), name='edit-client-order'),
+    path('order/<int:pk>/cancel', ClientOrderCancelView.as_view(), name='cancel-client-order'),
     path('catalog/buy/<int:pk>/', ClientBuyOrderView.as_view(), name='client-buy'),
 
     path('sales/', OperatorSalesView.as_view(), name='sales'),

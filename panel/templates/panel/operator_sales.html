@@ -25,6 +25,7 @@
                         <td>{{ sale.product.price }}</td>
                         <td>{{ sale.total_price }}</td>
                         <td>{{ sale.status }}</td>
+                        <td><a href="{% url 'panel:client-order' sale.pk %}">View order</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.test import Client
 from django.urls import reverse
@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, DetailView, UpdateView, DeleteVie
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 
-from panel.forms import ClientBuyForm
+from panel.forms import CatalogProductBuyForm
 from panel.models import Product, CatalogProduct, ClientOrder, OrderStatus
 from users.models import Role
 from users.utils import RoleBasedView, RoleRequiredMixin
@@ -176,6 +176,7 @@ class ProductDeleteView(RoleBasedView):
         Role.OPERATOR: OperatorProductDeleteView.as_view(),
     }
 
+# da
 
 class CatalogProductsView(RoleRequiredMixin, ListView):
     model = CatalogProduct
@@ -183,19 +184,6 @@ class CatalogProductsView(RoleRequiredMixin, ListView):
     context_object_name = 'products'
     paginate_by = 10
     allowed_roles = [Role.CLIENT, Role.OPERATOR]
-
-    def get_queryset(self):
-        products = CatalogProduct.objects.all()
-        if self.request.user.role != Role.CLIENT:
-            return products
-
-        for product in products:
-            product.buy_form = ClientBuyForm(
-                initial={'product_id': product.pk},
-                max_count=product.count
-            )
-
-        return products
 
 
 class CatalogProductView(RoleRequiredMixin, DetailView):
@@ -246,37 +234,60 @@ class ClientOrdersViews(RoleRequiredMixin, ListView):
         user = self.request.user
         return ClientOrder.objects.filter(user=user)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        orders = context['orders']
 
-        for order in orders:
-            order.total_price = order.product.price * order.count
+class ClientOrderView(RoleRequiredMixin, DetailView):
+    model = ClientOrder
+    context_object_name =  'order'
+    template_name = 'panel/client_order.html'
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
 
-        return context
+
+class ClientOrderEditView(RoleRequiredMixin, UpdateView):
+    model = ClientOrder
+    fields = ['status']
+    template_name = 'panel/default/form.html'
+    allowed_roles = [Role.OPERATOR]
+
+
+class ClientOrderCancelView(RoleRequiredMixin, View):
+    model = ClientOrder
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+
+    def get(self, request, pk):
+        order = ClientOrder.objects.get(pk=pk)
+        if order.status == OrderStatus.CANCELED:
+            return HttpResponseBadRequest('Order already canceled.')
+        if order.status == OrderStatus.COMPLETED:
+            return HttpResponseBadRequest('Can\'t cancel completed order')
+        order.status = OrderStatus.CANCELED
+        order.save()
+        return redirect(reverse('panel:client-order', args=(order.pk,)))
 
 
 class ClientBuyOrderView(RoleRequiredMixin, View):
     allowed_roles = [Role.CLIENT]
 
     def post(self, request, *args, **kwargs):
-        form = ClientBuyForm(request.POST)
+        form = CatalogProductBuyForm(request.POST)
+
         if form.is_valid():
             product_id = form.cleaned_data['product_id']
             count = form.cleaned_data['count']
             product = get_object_or_404(CatalogProduct, pk=product_id)
-            if count > product.count:
-                form.add_error('count', 'Invalid product count.')
-            else:
-                order = ClientOrder(
-                    user=request.user,
-                    product=product,
-                    count=count,
-                    status=OrderStatus.IN_PROGRESS,
-                )
-                order.save()
-                product.count = F('count') - count
-                product.save()
+
+            order = ClientOrder(
+                user=request.user,
+                product=product,
+                count=count,
+                status=OrderStatus.IN_PROGRESS,
+            )
+
+            order.save()
+            product.count = F('count') - count
+            product.save()
+        else:
+            return HttpResponseBadRequest(f'Something went wrong.')
+
         return redirect('panel:client-orders')
 
 
@@ -285,11 +296,3 @@ class OperatorSalesView(RoleRequiredMixin, ListView):
     template_name = 'panel/operator_sales.html'
     context_object_name = 'sales'
     allowed_roles = [Role.OPERATOR]
-
-    def get_queryset(self):
-        sales = ClientOrder.objects.all()
-
-        for sale in sales:
-            sale.total_price = sale.product.price * sale.count
-
-        return sales
