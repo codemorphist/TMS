@@ -17,6 +17,11 @@ urlpatterns = [
     path('catalog/product/<int:pk>', CatalogProductView.as_view(), name='catalog-product'),
     path('catalog/product/edit/<int:pk>', CatalogProductEditView.as_view(), name='edit-catalog-product'),
     path('catalog/product/delete/<int:pk>', CatalogProductDeleteView.as_view(), name='delete-catalog-product'),
+
+    path('orders/', ClientOrdersViews.as_view(), name='client-orders'),
+    path('catalog/buy/<int:pk>/', ClientBuyOrderView.as_view(), name='client-buy'),
+
+    path('sales/', OperatorSalesView.as_view(), name='sales'),
 ]
 
 

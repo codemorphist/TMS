@@ -9,9 +9,13 @@
                 <h3><a href="{{ product.get_absolute_url }}">{{ product.product.name }}</a></h3>
                 <ul>
                     <li>Price: ${{ product.price }}</li>
-                    {% if user.role == "operator" %}
-                        <li>Count: ${{ product.count }}</li>
-                    {% endif  %}
+                    {% if user.role == 'client' %}
+                        <form method="POST" action="{% url 'panel:client-buy' product.pk %}">
+                            {% csrf_token %}
+                            {{ product.buy_form.as_p }}
+                            <button type="submit">Buy</button>
+                        </form>
+                    {% endif %}
                 </ul>
             </div>
         {% endfor %}
