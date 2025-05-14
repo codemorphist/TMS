@@ -9,6 +9,6 @@ class CatalogProductBuyForm(forms.Form):
         product = kwargs.pop('product', None)
         super().__init__(*args, **kwargs)
         if product:
-            self.fields['count'].max_value = product.available_count
-            self.fields['count'].widget.attrs['max'] = product.available_count
+            self.fields['count'].max_value = product.count
+            self.fields['count'].widget.attrs['max'] = product.count
             self.fields['product_id'].initial = product.id

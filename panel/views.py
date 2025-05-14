@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db.models import F
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
@@ -248,7 +249,10 @@ class ClientOrderEditView(RoleRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         order = self.get_object()
-        order.update_status(form.cleaned_data['status'])
+        try:
+            order.update_status(OrderStatus.IN_PROGRESS)
+        except ValidationError as e:
+            return HttpResponseBadRequest(f'{e.message}')
         return super().form_valid(form)
 
 
@@ -272,19 +276,23 @@ class ClientBuyOrderView(RoleRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = CatalogProductBuyForm(request.POST)
 
-        if form.is_valid():
-            product_id = form.cleaned_data['product_id']
-            count = form.cleaned_data['count']
-            product = get_object_or_404(CatalogProduct, pk=product_id)
-
-            order = ClientOrder(
-                user=request.user,
-                product=product,
-                count=count,
-            )
-            order.update_status(OrderStatus.IN_PROGRESS)
-        else:
+        if not form.is_valid():
             return HttpResponseBadRequest(f'Something went wrong.')
+
+        product_id = form.cleaned_data['product_id']
+        count = form.cleaned_data['count']
+        product = get_object_or_404(CatalogProduct, pk=product_id)
+
+        order = ClientOrder(
+            user=request.user,
+            product=product,
+            count=count,
+        )
+
+        try:
+            order.update_status(OrderStatus.IN_PROGRESS)
+        except ValidationError as e:
+            return HttpResponseBadRequest(f'{e.message}')
 
         return redirect('panel:client-orders')
 

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Sum, F
 from django.urls import reverse
@@ -50,13 +51,6 @@ class CatalogProduct(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def available_count(self):
-        reserved = (self.orders
-                     .filter(product=self,
-                             status__in=[OrderStatus.IN_PROGRESS, OrderStatus.COMPLETED])
-                     .aggregate(reserved=Sum('count')))['reserved'] or 0
-        return self.count - reserved
-
     def get_absolute_url(self):
         return reverse('panel:catalog-product', args=(self.pk,))
 
@@ -71,14 +65,13 @@ class OrderStatus(models.TextChoices):
     IN_PROGRESS = 'in_progress', 'In Progress'
     CANCELED = 'canceled', 'Canceled'
     COMPLETED = 'completed', 'Completed'
-    CREATED = 'created', 'Created'
 
 
 class ClientOrder(models.Model):
     user = models.ForeignKey(PanelUser, on_delete=models.CASCADE)
     product = models.ForeignKey(CatalogProduct, on_delete=models.CASCADE, related_name='orders')
     count = models.IntegerField(default=1, validators=[MinValueValidator(1)])
-    status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.CREATED)
+    status = models.CharField(choices=OrderStatus.choices, max_length=16, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -101,10 +94,13 @@ class ClientOrder(models.Model):
         if new_status == OrderStatus.CANCELED:
             product.count = F('count') + order.count
         else:
+            if product.count < order.count:
+                raise ValidationError("Not enough product in stock.")
             product.count = F('count') - order.count
-        self.status = new_status
+        order.status = new_status
         product.save()
-        self.save()
+        order.save()
+        product.refresh_from_db()
 
 
 class ProviderOrder(models.Model):
