@@ -25,6 +25,7 @@ urlpatterns = [
     path('catalog/buy/<int:pk>/', ClientBuyOrderView.as_view(), name='client-buy'),
 
     path('sales/', OperatorSalesView.as_view(), name='sales'),
+
 ]
 
 
