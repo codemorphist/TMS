@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.urls import reverse
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
@@ -71,13 +71,14 @@ class OrderStatus(models.TextChoices):
     IN_PROGRESS = 'in_progress', 'In Progress'
     CANCELED = 'canceled', 'Canceled'
     COMPLETED = 'completed', 'Completed'
+    CREATED = 'created', 'Created'
 
 
 class ClientOrder(models.Model):
     user = models.ForeignKey(PanelUser, on_delete=models.CASCADE)
     product = models.ForeignKey(CatalogProduct, on_delete=models.CASCADE, related_name='orders')
     count = models.IntegerField(default=1, validators=[MinValueValidator(1)])
-    status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.IN_PROGRESS)
+    status = models.CharField(choices=OrderStatus.choices, max_length=16, default=OrderStatus.CREATED)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -88,6 +89,22 @@ class ClientOrder(models.Model):
 
     def get_absolute_url(self):
         return reverse('panel:client-order', args=(self.pk,))
+
+    def update_status(self, new_status: OrderStatus):
+        order = self
+        product = order.product
+        status = order.status
+
+        if status == new_status:
+            return
+
+        if new_status == OrderStatus.CANCELED:
+            product.count = F('count') + order.count
+        else:
+            product.count = F('count') - order.count
+        self.status = new_status
+        product.save()
+        self.save()
 
 
 class ProviderOrder(models.Model):

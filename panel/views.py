@@ -246,6 +246,11 @@ class ClientOrderEditView(RoleRequiredMixin, UpdateView):
     template_name = 'panel/default/form.html'
     allowed_roles = [Role.OPERATOR]
 
+    def form_valid(self, form):
+        order = self.get_object()
+        order.update_status(form.cleaned_data['status'])
+        return super().form_valid(form)
+
 
 class ClientOrderCancelView(RoleRequiredMixin, View):
     model = ClientOrder
@@ -257,8 +262,7 @@ class ClientOrderCancelView(RoleRequiredMixin, View):
             return HttpResponseBadRequest('Order already canceled.')
         if order.status == OrderStatus.COMPLETED:
             return HttpResponseBadRequest('Can\'t cancel completed order')
-        order.status = OrderStatus.CANCELED
-        order.save()
+        order.update_status(OrderStatus.CANCELED)
         return redirect(reverse('panel:client-order', args=(order.pk,)))
 
 
@@ -277,12 +281,8 @@ class ClientBuyOrderView(RoleRequiredMixin, View):
                 user=request.user,
                 product=product,
                 count=count,
-                status=OrderStatus.IN_PROGRESS,
             )
-
-            order.save()
-            product.count = F('count') - count
-            product.save()
+            order.update_status(OrderStatus.IN_PROGRESS)
         else:
             return HttpResponseBadRequest(f'Something went wrong.')
 
