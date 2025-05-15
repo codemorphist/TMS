@@ -112,7 +112,7 @@ class ProductBuyView(RoleRequiredMixin, View):
             order.save()
             product.save()
 
-            return HttpResponse('Added')
+            return redirect(order.get_absolute_url())
         else:
             return HttpResponseBadRequest(form.errors)
 
@@ -124,6 +124,18 @@ class OrdersView(RoleRequiredMixin, ListView):
     template_name = 'panel/orders.html'
 
     def get_queryset(self):
-        if self.request.user.role == Role.CLIENT:
-            return Order.objects.filter(client=self.request.user)
-        return Order.objects.all()
+        if self.request.user.role == Role.OPERATOR:
+            return Order.objects.all()
+        return Order.objects.filter(client=self.request.user)
+
+
+class OrderView(RoleRequiredMixin, DetailView):
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+    model = Order
+    context_object_name = 'order'
+    template_name = 'panel/order.html'
+
+    def get_queryset(self):
+        if self.request.user == Role.OPERATOR:
+            return Order.objects.all()
+        return Order.objects.filter(client=self.request.user)

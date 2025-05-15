@@ -1,20 +1,10 @@
 {% extends 'panel/default/base.html' %}
 
-{% block title %}
-    {% if user.role == 'operator' %}
-        TMS Panel | Sales
-    {% else %}
-        TMS Panel | Orders
-    {% endif %}
-{% endblock %}
+{% block title %}TMS Panel | Orders{% endblock %}
 
 {% block content %}
     <div>
-        {% if user.role == 'operator' %}
-            <h2>Sales</h2>
-        {% else %}
-            <h2>Orders</h2>
-        {% endif %}
+        <h2>Orders</h2>
 
         {% if orders %}
             <table>
@@ -24,25 +14,25 @@
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Total price</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for order in orders %}
-                    <tr>
+                    <tr class="order_status_{{ order.status }}">
                         <td>{{ order.client }}</td>
                         <td>{{ order.product }}</td>
                         <td>{{ order.quantity }}</td>
                         <td>{{ order.get_total_price }}</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td><a href="{% url 'panel:order' order.pk %}">View</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            {% if user.role == 'operator' %}
-                <p>You have no any sales.</p>
-            {% else %}
-                <p>You have no any orders.</p>
-            {% endif %}
+            <p>You have no any orders.</p>
         {% endif %}
     </div>
 {% endblock %}

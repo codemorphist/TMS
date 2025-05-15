@@ -6,7 +6,7 @@
                 <li class="header-menu-item"><a href="{% url 'admin:index' %}">Admin panel</a></li>
             {% elif user.role == 'operator' %}
                 <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Catalog</a></li>
-                <li class="header-menu-item"><a href="{% url 'panel:sales' %}">Sales</a></li>
+                <li class="header-menu-item"><a href="{% url 'panel:orders' %}">Orders</a></li>
                 <li class="header-menu-item"><a href="">Deliveries</a></li>
             {% elif user.role == 'provider' %}
                 <li class="header-menu-item"><a href="">My deliveries</a></li>
