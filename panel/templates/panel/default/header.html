@@ -3,21 +3,21 @@
     {% if user %}
         <menu class="header-menu">
             {% if user.role == 'admin' %}
-                <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Products catalog</a></li>
+                <li class="header-menu-item"><a href="">Products catalog</a></li>
                 <li class="header-menu-item"><a href="{% url 'admin:index' %}">Admin panel</a></li>
             {% elif user.role == 'operator' %}
-                <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Products catalog</a></li>
-                <li class="header-menu-item"><a href="{% url 'panel:products' %}">Products</a></li>
-                <li class="header-menu-item"><a href="{% url 'panel:sales' %}">Sales</a></li>
+                <li class="header-menu-item"><a href="">Products catalog</a></li>
+                <li class="header-menu-item"><a href="">Products</a></li>
+                <li class="header-menu-item"><a href="">Sales</a></li>
                 <li class="header-menu-item"><a href="">Deliveries</a></li>
                 <li class="header-menu-item"><a href="">Clients</a></li>
                 <li class="header-menu-item"><a href="">Providers</a></li>
             {% elif user.role == 'provider' %}
-                <li class="header-menu-item"><a href="{% url 'panel:products' %}">My products</a></li>
+                <li class="header-menu-item"><a href="">My products</a></li>
                 <li class="header-menu-item"><a href="">My deliveries</a></li>
             {% elif user.role == 'client' %}
-                <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Products catalog</a></li>
-                <li class="header-menu-item"><a href="{% url 'panel:client-orders' %}">My orders</a></li>
+                <li class="header-menu-item"><a href="">Products catalog</a></li>
+                <li class="header-menu-item"><a href="">My orders</a></li>
             {% else %}
 
             {% endif %}

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -31,11 +31,13 @@ class AnonymousRequiredMixin:
 class RoleRequiredMixin:
     allowed_roles = []
 
+    __defaut_no_auth__ = 'users:login'
+
     def dispatch(self, request, *args, **kwargs):
         role = getattr(request.user, 'role', None)
 
         if role not in self.allowed_roles:
-            raise Http404()
+            return redirect(self.__defaut_no_auth__)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -68,7 +70,7 @@ class RoleBasedView(View):
             return self.no_auth(request, *args, **kwargs)
 
         if user.role == Role.ADMIN:
-            return redirect('/admin/')
+            return redirect('admin:index')
 
         if user.role not in self.views:
             if self.no_role is None:
