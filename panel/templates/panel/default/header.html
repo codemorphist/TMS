@@ -6,13 +6,13 @@
                 <li class="header-menu-item"><a href="{% url 'admin:index' %}">Admin panel</a></li>
             {% elif user.role == 'operator' %}
                 <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Catalog</a></li>
-                <li class="header-menu-item"><a href="">Sales</a></li>
+                <li class="header-menu-item"><a href="{% url 'panel:sales' %}">Sales</a></li>
                 <li class="header-menu-item"><a href="">Deliveries</a></li>
             {% elif user.role == 'provider' %}
                 <li class="header-menu-item"><a href="">My deliveries</a></li>
             {% elif user.role == 'client' %}
-                <li class="header-menu-item"><a href="">Products catalog</a></li>
-                <li class="header-menu-item"><a href="">My orders</a></li>
+                <li class="header-menu-item"><a href="{% url 'panel:catalog' %}">Catalog</a></li>
+                <li class="header-menu-item"><a href="{% url 'panel:orders' %}">My orders</a></li>
             {% endif %}
 
             {% if user.role != 'admin' %}

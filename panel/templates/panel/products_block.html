@@ -7,6 +7,13 @@
                 {% if user.role == 'operator' %}
                     <p>Stock: {{ product.stock }}</p>
                 {% endif %}
+                {% if user.role == 'client' and product.stock > 0 %}
+                    <form method="POST" action="{% url 'panel:buy-product' %}">
+                        {% csrf_token %}
+                        {{ product.get_order_form.as_p }}
+                        <button type="submit">Buy</button>
+                    </form>
+                {% endif %}
                 <a href="{{ product.get_absolute_url }}">View</a>
             </div>
         {% endfor %}

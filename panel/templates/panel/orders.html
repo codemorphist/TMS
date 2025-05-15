@@ -1,0 +1,48 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}
+    {% if user.role == 'operator' %}
+        TMS Panel | Sales
+    {% else %}
+        TMS Panel | Orders
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% if user.role == 'operator' %}
+            <h2>Sales</h2>
+        {% else %}
+            <h2>Orders</h2>
+        {% endif %}
+
+        {% if orders %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.client }}</td>
+                        <td>{{ order.product }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>{{ order.get_total_price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            {% if user.role == 'operator' %}
+                <p>You have no any sales.</p>
+            {% else %}
+                <p>You have no any orders.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

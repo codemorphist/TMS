@@ -1,8 +1,13 @@
+from django.db.models import F
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import TemplateView, CreateView, DetailView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
-from panel.models import Product, Category
+from panel.forms import OrderForm
+from panel.models import Product, Category, Order
 from users.models import Role
 from users.utils import RoleBasedView, RoleRequiredMixin
 
@@ -86,3 +91,39 @@ class ProductDeleteView(RoleRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('panel:catalog')
+
+
+class ProductBuyView(RoleRequiredMixin, View):
+    allowed_roles = [Role.CLIENT]
+
+    def post(self, request, *args, **kwargs):
+        form = OrderForm(request.POST)
+
+        if form.is_valid():
+            product_pk = form.cleaned_data['product']
+            product = Product.objects.get(pk=product_pk)
+            quantity = form.cleaned_data['quantity']
+
+            if quantity > product.stock:
+                return HttpResponseBadRequest(form.errors)
+
+            order = Order(client=request.user, product=product, quantity=quantity)
+            product.stock = F('stock') - quantity
+            order.save()
+            product.save()
+
+            return HttpResponse('Added')
+        else:
+            return HttpResponseBadRequest(form.errors)
+
+
+class OrdersView(RoleRequiredMixin, ListView):
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+    model = Order
+    context_object_name = 'orders'
+    template_name = 'panel/orders.html'
+
+    def get_queryset(self):
+        if self.request.user.role == Role.CLIENT:
+            return Order.objects.filter(client=self.request.user)
+        return Order.objects.all()
