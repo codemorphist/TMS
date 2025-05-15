@@ -1,13 +1,13 @@
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, CreateView, DetailView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from panel.forms import OrderForm
-from panel.models import Product, Category, Order
+from panel.models import Product, Category, Order, OrderStatus
 from users.models import Role
 from users.utils import RoleBasedView, RoleRequiredMixin
 
@@ -136,6 +136,40 @@ class OrderView(RoleRequiredMixin, DetailView):
     template_name = 'panel/order.html'
 
     def get_queryset(self):
-        if self.request.user == Role.OPERATOR:
+        if self.request.user.role == Role.OPERATOR:
             return Order.objects.all()
         return Order.objects.filter(client=self.request.user)
+
+
+class OrderEditView(RoleRequiredMixin, UpdateView):
+    allowed_roles = [Role.OPERATOR]
+    model = Order
+    fields = ['status']
+    template_name = 'panel/default/form.html'
+
+    def form_valid(self, form):
+        order = self.get_object()
+        new_status = form.cleaned_data['status']
+        order.update_status(new_status)
+        return super().form_valid(form)
+
+
+class OrderCancelView(RoleRequiredMixin, View):
+    allowed_roles = [Role.CLIENT, Role.OPERATOR]
+
+    def get(self, request, pk: int):
+        order = get_object_or_404(Order, pk=pk)
+
+        if request.user.role == Role.CLIENT:
+            if order.client != request.user:
+                raise Http404('Order not found')
+
+        if order.status == OrderStatus.CANCELED:
+            return HttpResponseBadRequest('Order already canceled.')
+
+        if order.status == OrderStatus.COMPLETED:
+            return HttpResponseBadRequest('Can\'n cancel completed order')
+
+        order.update_status(OrderStatus.CANCELED)
+        return redirect(order.get_absolute_url())
+

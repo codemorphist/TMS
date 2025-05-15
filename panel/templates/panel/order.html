@@ -13,10 +13,10 @@
         </ul>
         <div>
             {% if order.status == 'in_progress' %}
-                <a href="">Cancel order</a>
+                <a href="{% url 'panel:cancel-order' order.pk %}">Cancel order</a>
             {% endif %}
             {% if user.role == 'operator' %}
-                <a href="">Change status</a>
+                <a href="{% url 'panel:edit-order' order.pk %}">Change status</a>
             {% endif  %}
         </div>
     </div>

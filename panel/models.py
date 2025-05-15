@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -64,4 +65,14 @@ class Order(models.Model):
         return reverse('panel:order', kwargs={'pk': self.pk})
 
     def update_status(self, new_status: OrderStatus):
-        pass
+        if new_status == self.status:
+            return
+
+        if new_status == OrderStatus.CANCELED:
+            self.product.stock = F('stock') + self.quantity
+        else:
+            self.product.stock = F('stock') - self.quantity
+
+        self.product.save()
+        self.status = new_status
+        self.save()
