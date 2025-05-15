@@ -1,0 +1,16 @@
+{% if products %}
+    <div>
+        {% for product in products %}
+            <div>
+                <h3>{{ product.name }}</h3>
+                <p>${{ product.price }}</p>
+                {% if user.role == 'operator' %}
+                    <p>Stock: {{ product.stock }}</p>
+                {% endif %}
+                <a href="{{ product.get_absolute_url }}">View</a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No any product here.</p>
+{% endif %}

@@ -1,7 +1,10 @@
 from django.contrib import admin
 
+from panel.models import Category, Product
 from users.models import PanelUser
 
+admin.site.register(Category)
+admin.site.register(Product)
 
 # class ProductAdmin(admin.ModelAdmin):
 #     def formfield_for_foreignkey(self, db_field, request, **kwargs):

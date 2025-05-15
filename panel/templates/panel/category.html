@@ -1,0 +1,22 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Category {{ category.name }}{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+        {% if user.role == 'operator' %}
+            <div>
+                <a href="{% url 'panel:edit-category' category.pk %}">Edit category</a>
+                <a href="{% url 'panel:delete-category' category.pk %}">Delete category</a>
+            </div>
+        {% endif %}
+        <div>
+            <h3>Products</h3>
+            {% with products=category.products.all %}
+                {% include 'panel/products_block.html' %}
+            {% endwith %}
+        </div>
+    </section>
+{% endblock %}

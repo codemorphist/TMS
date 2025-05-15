@@ -1,0 +1,35 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Catalog{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Categories</h2>
+
+        {% if categories %}
+        <ul>
+            {% for category in categories %}
+                <li><a href="{% url 'panel:category' category.pk %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No category here.</p>
+        {% endif  %}
+        {% if user.role == 'operator' %}
+            <div>
+                <a href="{% url 'panel:add-category' %}">Add category</a>
+            </div>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Catalog</h2>
+        {% include 'panel/products_block.html' %}
+
+        {% if user.role == 'operator' %}
+            <div>
+                <a href="{% url 'panel:add-product' %}">Add product</a>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
