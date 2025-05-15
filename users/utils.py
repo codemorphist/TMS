@@ -34,6 +34,9 @@ class RoleRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         role = getattr(request.user, 'role', None)
 
+        if not request.user.is_authenticated:
+            return redirect('users:login')
+
         if role not in self.allowed_roles:
             raise PermissionDenied()
 

@@ -1,18 +1,9 @@
 from django.contrib import admin
 
-from panel.models import Category, Product
-from users.models import PanelUser
+from panel.models import Category, Product, Delivery, Order
+
 
 admin.site.register(Category)
 admin.site.register(Product)
-
-# class ProductAdmin(admin.ModelAdmin):
-#     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-#         if db_field.name == "provider":
-#             kwargs["queryset"] = PanelUser.objects.filter(role='provider')
-#         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-# admin.site.register(ProductCategory)
-# admin.site.register(Product, ProductAdmin)
-# admin.site.register(CatalogProduct)
+admin.site.register(Order)
+admin.site.register(Delivery)

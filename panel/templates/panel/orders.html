@@ -27,7 +27,7 @@
                         <td>{{ order.get_total_price }}</td>
                         <td>{{ order.get_status_display }}</td>
                         <td>
-                            <a href="{% url 'panel:order' order.pk %}">View</a>
+                            <a href="{{ order.get_absolute_url }}">View</a>
                             {% if order.status == 'in_progress' %}
                                 <a href="{% url 'panel:cancel-order' order.pk %}">Cancel</a>
                             {% endif %}

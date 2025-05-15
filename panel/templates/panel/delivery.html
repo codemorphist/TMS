@@ -1,0 +1,26 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Delivery{% endblock %}
+
+{% block content %}
+    <div>
+        <ul>
+            <li>Provider: {{ delivery.provider }}</li>
+            <li>Product: {{ delivery.product }}</li>
+            <li>Quantity: {{ delivery.quantity }}</li>
+            <li>Status: {{ delivery.get_status_display }}</li>
+        </ul>
+        <div>
+            {% if delivery.status == 'in_progress' %}
+                <a href="{% url 'panel:cancel-delivery' delivery.pk %}">Cancel</a>
+            {% endif %}
+
+            {% if user.role == 'operator' %}
+                {% if delivery.status == 'in_progress' %}
+                    <a href="{% url 'panel:complete-delivery' delivery.pk %}">Mark completed</a>
+                {% endif %}
+                <a href="{% url 'panel:edit-delivery' delivery.pk %}">Edit</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

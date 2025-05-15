@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import F
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.db import transaction
 
 from panel.forms import OrderForm
 from users.models import PanelUser
@@ -68,11 +69,45 @@ class Order(models.Model):
         if new_status == self.status:
             return
 
-        if new_status == OrderStatus.CANCELED:
-            self.product.stock = F('stock') + self.quantity
-        else:
-            self.product.stock = F('stock') - self.quantity
+        with transaction.atomic():
+            if new_status == OrderStatus.CANCELED:
+                Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+            else:
+                Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
 
-        self.product.save()
-        self.status = new_status
-        self.save()
+            self.status = new_status
+            self.save()
+
+
+class DeliveryStatus(models.TextChoices):
+    IN_PROGRESS = 'in_progress', _('In Progress')
+    CANCELED = 'canceled', _('Canceled')
+    COMPLETED = 'completed', _('Completed')
+
+
+class Delivery(models.Model):
+    provider = models.ForeignKey(PanelUser, on_delete=models.CASCADE, related_name='deliveries')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='deliveries')
+    quantity = models.PositiveIntegerField(default=1, blank=False, null=False)
+    status = models.CharField(choices=DeliveryStatus.choices, default=DeliveryStatus.IN_PROGRESS)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = 'Deliveries'
+
+    def get_absolute_url(self):
+        return reverse('panel:delivery', kwargs={'pk': self.pk})
+
+    def update_status(self, new_status: OrderStatus):
+        if new_status == self.status:
+            return
+
+        with transaction.atomic():
+            if new_status == DeliveryStatus.COMPLETED:
+                Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
+            else:
+                Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+
+            self.status = new_status
+            self.save()

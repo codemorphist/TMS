@@ -3,7 +3,7 @@
 {% block title %}TMS Panel | Catalog{% endblock %}
 
 {% block content %}
-    <section>
+    <div>
         <h2>Categories</h2>
 
         {% if categories %}
@@ -20,9 +20,9 @@
                 <a href="{% url 'panel:add-category' %}">Add category</a>
             </div>
         {% endif %}
-    </section>
+    </div>
 
-    <section>
+    <div>
         <h2>Catalog</h2>
         {% include 'panel/products_block.html' %}
 
@@ -31,5 +31,5 @@
                 <a href="{% url 'panel:add-product' %}">Add product</a>
             </div>
         {% endif %}
-    </section>
+    </div>
 {% endblock %}
