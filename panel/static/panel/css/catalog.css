@@ -1,0 +1,160 @@
+.categories_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.categories_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    width: 512px;
+    max-height: 220px;
+    padding: 20px;
+    border: 1px solid lightgray;
+    margin-top: 24px;
+
+    overflow-y: auto;
+}
+
+.category_item a {
+    color: dodgerblue;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.catalog_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 64px;
+}
+
+.category_add_button {
+    text-align: center;
+    width: 512px;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    padding: 16px;
+    background: dodgerblue;
+    display: block;
+    margin: 16px;
+}
+
+.category_add_button:hover {
+    background: #137de3;
+}
+
+.products {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin-top: 24px;
+}
+
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 256px;
+    height: 128px;
+    padding: 16px;
+    border: 1px solid lightgray;
+    margin: 16px;
+}
+
+.product:hover {
+    background: #eeeeee;
+}
+
+.product_stock_out {
+    background: #eeeeee;
+}
+
+.product_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.product_name a {
+    color: black;
+    text-decoration: none;
+}
+
+.product_name a:hover {
+    text-decoration: underline;
+    text-decoration-color: dodgerblue;
+}
+
+.product_description {
+    width: 200px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 6px;
+    text-align: center;
+    font-style: italic;
+}
+
+.product_price {
+    margin-top: 6px;
+}
+
+.product_buy_form {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    width: 80%;
+    padding: 10px;
+    margin: 4px;
+
+    border: 1px #eeeeee;
+}
+
+.product_buy_form input {
+    width: 100%;
+}
+
+.product_buy_button {
+    width: 80%;
+    padding: 12px 16px;
+
+    background: dodgerblue;
+    color: white;
+    border: none;
+
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+.product_view_button:hover {
+    background: #137de3;
+}
+
+.product_add_button {
+    display: block;
+    width: 256px;
+    color: white;
+    background: dodgerblue;
+    padding: 16px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+
+    margin: 16px;
+}

@@ -1,15 +1,20 @@
 {% extends 'panel/default/base.html' %}
+{% load static %}
 
 {% block title %}TMS Panel | Catalog{% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'panel/css/catalog.css' %}">
+{% endblock %}
+
 {% block content %}
-    <div>
+    <div class="categories_content">
         <h2>Categories</h2>
 
         {% if categories %}
-        <ul>
+        <ul class="categories_list">
             {% for category in categories %}
-                <li><a href="{% url 'panel:category' category.pk %}">{{ category.name }}</a></li>
+                <li class="category_item"><a href="{% url 'panel:category' category.pk %}">{{ category.name }}</a></li>
             {% endfor %}
         </ul>
         {% else %}
@@ -17,18 +22,21 @@
         {% endif  %}
         {% if user.role == 'operator' %}
             <div>
-                <a href="{% url 'panel:add-category' %}">Add category</a>
+                <a class="category_add_button" href="{% url 'panel:add-category' %}">Add category</a>
             </div>
         {% endif %}
     </div>
 
-    <div>
-        <h2>Catalog</h2>
+    <div class="catalog_content">
+        <h2 class="catalog_header">Catalog</h2>
+
         {% include 'panel/products_block.html' %}
+
+        {% include 'default/pagination.html' %}
 
         {% if user.role == 'operator' %}
             <div>
-                <a href="{% url 'panel:add-product' %}">Add product</a>
+                <a class="product_add_button" href="{% url 'panel:add-product' %}">Add product</a>
             </div>
         {% endif %}
     </div>

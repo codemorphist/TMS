@@ -69,11 +69,17 @@ class Order(models.Model):
         if new_status == self.status:
             return
 
+
         with transaction.atomic():
-            if new_status == OrderStatus.CANCELED:
-                Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
-            else:
-                Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
+            match [self.status, new_status]:
+                case [_, OrderStatus.CANCELED]:
+                    Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
+                case [_, OrderStatus.IN_PROGRESS]:
+                    Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+                case [OrderStatus.CANCELED, OrderStatus.COMPLETED]:
+                    Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+                case _:
+                    pass
 
             self.status = new_status
             self.save()
@@ -104,10 +110,13 @@ class Delivery(models.Model):
             return
 
         with transaction.atomic():
-            if new_status == DeliveryStatus.COMPLETED:
-                Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
-            else:
-                Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+            match [self.status, new_status]:
+                case [_, OrderStatus.COMPLETED]:
+                    Product.objects.filter(id=self.product.id).update(stock=F('stock') + self.quantity)
+                case [OrderStatus.COMPLETED, _]:
+                    Product.objects.filter(id=self.product.id).update(stock=F('stock') - self.quantity)
+                case _:
+                    pass
 
             self.status = new_status
             self.save()

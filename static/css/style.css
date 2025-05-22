@@ -243,3 +243,20 @@ th, td {
     padding: 8px;
 }
 
+
+.pagination {
+    font-size: 20px;
+}
+
+.pagination_next, .pagination_previous {
+    color: #137de3;
+    text-decoration: none;
+    font-weight: bolder;
+    padding: 4px
+}
+
+.pagination_next:hover, .pagination_previous:hover {
+    color: white;
+    background: dodgerblue;
+}
+
