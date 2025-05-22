@@ -1,0 +1,23 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Order{% endblock %}
+
+{% block content %}
+    <div>
+        <ul>
+            <li>Client: {{ order.client }}</li>
+            <li>Product: <a href="{% url 'panel:product' order.product.pk %}">{{ order.product }}</a></li>
+            <li>Quantity: {{ order.quantity }}</li>
+            <li>Total price: {{ order.get_total_price }}</li>
+            <li>Status: {{ order.get_status_display }}</li>
+        </ul>
+        <div>
+            {% if order.status == 'in_progress' %}
+                <a href="{% url 'panel:cancel-order' order.pk %}">Cancel order</a>
+            {% endif %}
+            {% if user.role == 'operator' %}
+                <a href="{% url 'panel:edit-order' order.pk %}">Change status</a>
+            {% endif  %}
+        </div>
+    </div>
+{% endblock %}

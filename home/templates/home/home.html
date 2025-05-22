@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TMS Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+</head>
+<body>
+        <header class="header">
+            <h1 class="header-title"><a href="{% url 'home:home' %}">Trade Management System</a></h1>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <p>TMS is app for manage you trades</p>
+                <a class="default-button" href="{% url 'panel:panel' %}">Go to panel</a>
+            </div>
+        </main>
+
+        {% include 'default/footer.html' %}
+</body>
+</html>

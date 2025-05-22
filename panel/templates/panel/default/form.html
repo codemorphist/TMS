@@ -1,0 +1,21 @@
+{% extends 'panel/default/base.html' %}
+
+{% block content %}
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button class="blue-button form-button" type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'panel/default/base.html' %}
+
+{% block title %}TMS Panel | Orders{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>Orders</h2>
+
+        {% if orders %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr class="order_status_{{ order.status }}">
+                        <td>{{ order.client }}</td>
+                        <td>{{ order.product }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>{{ order.get_total_price }}</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>
+                            <a href="{{ order.get_absolute_url }}">View</a>
+                            {% if order.status == 'in_progress' %}
+                                <a href="{% url 'panel:cancel-order' order.pk %}">Cancel</a>
+                            {% endif %}
+                            {% if user.role == 'operator' %}
+                                <a href="{% url 'panel:edit-order' order.pk %}">Edit status</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You have no any orders.</p>
+        {% endif %}
+    </div>
+{% endblock %}

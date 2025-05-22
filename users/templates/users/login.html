@@ -1,0 +1,39 @@
+{% extends 'default/base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2 class="form-header">Log in</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="non-field-errors">
+                {{ form.non_field_errors|striptags }}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <ul class="error">
+                            {% for error in field.errors %}
+                                <li>{{ error | escape }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button class="blue-button form-button" type="submit">Log in</button>
+        </form>
+
+        <div class="form-links">
+            <a class="default-link" href="{% url 'users:register-client' %}">Register as Client</a>
+            <a class="default-link" href="{% url 'users:register-provider' %}">Register as Provider</a>
+        </div>
+    </div>
+
+{% endblock %}

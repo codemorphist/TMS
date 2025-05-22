@@ -1,0 +1,31 @@
+{% if products %}
+    <div class="products">
+        {% for product in products %}
+            <div class="product {% if not product.stock %}product_stock_out"{% endif %}">
+                <div class="product_info">
+                    <h3 class="product_name"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+                    <p class="product_price">${{ product.price }}</p>
+                    <p class="product_description">{{ product.description }}</p>
+                </div>
+                {% if user.role == 'operator' %}
+                    <p class="product_stock">Stock: {{ product.stock }}</p>
+                {% endif %}
+                {% if user.role == 'client' %}
+                    {% if product.stock > 0 %}
+                        <form class="product_buy_form" method="POST" action="{% url 'panel:buy-product' %}">
+                            {% csrf_token %}
+                            {% for field in product.get_order_form %}
+                                {{ field }}
+                            {% endfor %}
+                            <button class="product_buy_button" type="submit">Buy</button>
+                        </form>
+                    {% else %}
+                        <p class="product_stock_out_info">Out of stock</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="product_empty">No any product here.</p>
+{% endif %}
